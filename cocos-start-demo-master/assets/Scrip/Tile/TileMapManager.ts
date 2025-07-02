@@ -2,6 +2,7 @@
 import { _decorator, Component, Node, resources, SpriteFrame, Sprite, UITransform, Layers } from 'cc';
 const { ccclass, property } = _decorator;
 import levels from '../../Levels';
+import { DataManagerInstance } from '../../Runtime/DataManager';
 import { createUINode } from '../../Utils/index';
 import { TileManager } from './TileManager';
 export const TILE_WIDTH = 55;
@@ -11,8 +12,9 @@ export const TILE_HEIGHT = 55;
 export class TileMapManager extends Component{
  async init()
   {
-     const  {mapInfo} = levels[`level${1}`];
+
      const SpriteFrame = await this.loadRes();
+     const {mapInfo} = DataManagerInstance// const {mapInfo}等价于DataManagerInstance.mapInfo
      for(let i=0;i<mapInfo.length;i++)
      {
       const column = mapInfo[i];
@@ -37,7 +39,7 @@ export class TileMapManager extends Component{
      }
   }
 
-
+  //加载图片资源
   loadRes(){
       return new Promise<SpriteFrame[]>((resolve,reject)=>{
       resources.loadDir('texture/tile/tile',SpriteFrame,function(err,assets)
