@@ -10,4 +10,7 @@ export enum TILE_TYPE_ENUM{
   CLIFF_RIGHT = 'CLIFF_RIGHT',
   FLOOR = 'FLOOR',
 };
-console.log('枚举文件加载了');
+
+export enum EVENT_ENUM{
+  NEXT_LEVEL = 'NEXT_LEVEL'
+}

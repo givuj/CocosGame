@@ -9,3 +9,7 @@ export const createUINode = (name:string='')=>
     node.layer = 1<<Layers.nameToLayer("UI_2D");
     return node;
 }
+
+
+//随机瓦片类型，有些地板有几种类型比如土地板，木地板
+export const randomByRange = (start:number,end:number) =>Math.floor(start+(end-start)*Math.random())

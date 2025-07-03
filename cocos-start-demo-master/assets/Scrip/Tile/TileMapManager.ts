@@ -2,8 +2,9 @@
 import { _decorator, Component, Node, resources, SpriteFrame, Sprite, UITransform, Layers } from 'cc';
 const { ccclass, property } = _decorator;
 import levels from '../../Levels';
-import { DataManagerInstance } from '../../Runtime/DataManager';
-import { createUINode } from '../../Utils/index';
+import DataManager from '../../Runtime/DataManager';
+import ResourcesManager from '../../Runtime/ResourceManager';
+import { createUINode, randomByRange } from '../../Utils/index';
 import { TileManager } from './TileManager';
 export const TILE_WIDTH = 55;
 export const TILE_HEIGHT = 55;
@@ -13,8 +14,8 @@ export class TileMapManager extends Component{
  async init()
   {
 
-     const SpriteFrame = await this.loadRes();
-     const {mapInfo} = DataManagerInstance// const {mapInfo}等价于DataManagerInstance.mapInfo
+     const SpriteFrame = await ResourcesManager.Instance.loadRes('texture/tile/tile');//加载瓦片资源
+     const {mapInfo} = DataManager.Instance// const {mapInfo}等价于DataManagerInstance.mapInfo
      for(let i=0;i<mapInfo.length;i++)
      {
       const column = mapInfo[i];
@@ -23,7 +24,13 @@ export class TileMapManager extends Component{
         const item = column[j];
         if(item.src === null||item.type === null)
         continue;
-        const imSrc = `tile (${item.src})`;
+
+        let number = item.src;
+        if((number===1||number===5||number===9)&&i%2===0&&j%2===0)
+        {
+          number+=randomByRange(0,4);
+        }
+        const imSrc = `tile (${number})`;
 
         const node = createUINode();
 
@@ -39,18 +46,4 @@ export class TileMapManager extends Component{
      }
   }
 
-  //加载图片资源
-  loadRes(){
-      return new Promise<SpriteFrame[]>((resolve,reject)=>{
-      resources.loadDir('texture/tile/tile',SpriteFrame,function(err,assets)
-      {
-        if(err)
-        {
-          reject(err);
-          return;
-        }
-        resolve(assets);
-      })
-    })
-  }
 }
